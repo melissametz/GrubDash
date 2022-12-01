@@ -57,7 +57,9 @@ describe("orders router", () => {
       expect(response.body.data.id).not.toBeUndefined();
       expect(response.body.data.deliverTo).toEqual(expectedDeliverTo);
       expect(response.status).toBe(201);
-      expect(orders.find(order => order.deliverTo === expectedDeliverTo)).not.toBeUndefined();
+      expect(
+        orders.find((order) => order.deliverTo === expectedDeliverTo)
+      ).not.toBeUndefined();
     });
 
     test("returns 400 if deliverTo is missing", async () => {
@@ -758,7 +760,7 @@ describe("orders router", () => {
       expect(response.body.data).toBeUndefined();
       expect(response.body.error).toBeUndefined();
       expect(response.status).toBe(204);
-      
+
       const deleted = await request(app)
         .get(`${ATTACHED_PATH}/22`)
         .set("Accept", "application/json");
