@@ -12,7 +12,7 @@ const nextId = require("../utils/nextId");
 update, delete, and list orders.*/
 
 //checks order exists
-const orderExists = (req, res, next) => {
+function orderExists(req, res, next) {
   const orderId = req.params.orderId;
   const foundOrder = orders.find((order) => order.id === orderId);
   if (foundOrder) {
@@ -25,7 +25,7 @@ const orderExists = (req, res, next) => {
 };
 
 //checks for order pending status
-const pendingCheck = (req, res, next) => {
+function pendingCheck(req, res, next) {
   if (res.locals.foundOrder.status === "pending") {
     return next();
   }
@@ -36,7 +36,7 @@ const pendingCheck = (req, res, next) => {
 };
 
 //checks deliver to property - must include
-const deliverToValidator = (req, res, next) => {
+function deliverToValidator(req, res, next){
   const { data: { deliverTo } = {} } = req.body;
   //console.log("Hello Friend", req.body);
   if (deliverTo) {
@@ -48,7 +48,7 @@ const deliverToValidator = (req, res, next) => {
 };
 
 //checks mobile number property - must include
-const mobileNumberValidator = (req, res, next) => {
+function mobileNumberValidator(req, res, next){
   const { data: { mobileNumber } = {} } = req.body;
   if (mobileNumber) {
     res.locals.mobileNumber = mobileNumber;
@@ -58,7 +58,7 @@ const mobileNumberValidator = (req, res, next) => {
 };
 
 //checks dish property - must include at least one and cannot be an array
-const dishesValidator = (req, res, next) => {
+function dishesValidator(req, res, next) {
   const { data: { dishes } = {} } = req.body;
   if (dishes && Array.isArray(dishes) && dishes.length > 0) {
     res.locals.dishes = dishes;
@@ -68,7 +68,7 @@ const dishesValidator = (req, res, next) => {
 };
 
 //checks id - must match :orderId from route
-const idValidator = (req, res, next) => {
+function idValidator(req, res, next) {
   const { data: { id } = {} } = req.body;
   if (id === undefined || id === null || id.length === 0) {
     return next();
@@ -80,7 +80,7 @@ const idValidator = (req, res, next) => {
 };
 
 //checks status of order - must include status
-const statusValidator = (req, res, next) => {
+function statusValidator (req, res, next) {
   const { data: { status } = {} } = req.body;
   if (status && status !== "invalid") {
     res.locals.status = status;
@@ -90,7 +90,7 @@ const statusValidator = (req, res, next) => {
 };
 
 //checks quantity property - must include
-const quantityValidator = (req, res, next) => {
+function quantityValidator (req, res, next){
   res.locals.dishes.forEach((dish) => {
     if (!(dish.quantity > 0) || typeof dish.quantity !== "number") {
       const index = res.locals.dishes.indexOf(dish);
@@ -105,12 +105,12 @@ const quantityValidator = (req, res, next) => {
 };
 
 //list orders
-const list = (req, res) => {
+function list(req, res){
   res.status(200).json({ data: orders });
 };
 
 //create orders
-const create = (req, res) => {
+function create(req, res) {
   const { data: { status } = {} } = req.body;
   const newOrder = {
     id: nextId(),
@@ -124,7 +124,7 @@ const create = (req, res) => {
 };
 
 //update orders
-const update = (req, res) => {
+function update(req, res){
   const {
     data: { deliverTo, mobileNumber, status, dishes },
   } = req.body;
@@ -138,12 +138,12 @@ const update = (req, res) => {
 };
 
 //read orders
-const read = (req, res) => {
+function read(req, res) {
   res.json({ data: res.locals.foundOrder });
 };
 
 //delete orders
-const destroy = (req, res) => {
+function destroy(req, res) {
   const index = orders.indexOf(res.locals.foundOrder);
   orders.splice(index, 1);
   res.sendStatus(204);

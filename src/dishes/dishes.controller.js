@@ -11,12 +11,12 @@ const nextId = require("../utils/nextId");
 read, update, and list dishes. Note that dishes cannot be deleted*/
 
 //list dishes
-const list = (req, res) => {
+function list(req, res) {
   res.json({ data: dishes });
 };
 
 //validates id - must include id
-const idValidator = (req, res, next) => {
+function idValidator(req, res, next) {
   const { data: { id } = {} } = req.body;
   if (id === undefined || id === null || id.length === 0) {
     return next();
@@ -28,7 +28,7 @@ const idValidator = (req, res, next) => {
 };
 
 //validates name - must include name
-const nameValidator = (req, res, next) => {
+function nameValidator(req, res, next) {
   const { data: { name } = {} } = req.body;
   if (name) {
     res.locals.name = name;
@@ -38,7 +38,7 @@ const nameValidator = (req, res, next) => {
 };
 
 //validates description - must include description
-const descValidator = (req, res, next) => {
+function descValidator(req, res, next) {
   const { data: { description } = {} } = req.body;
   if (description) {
     res.locals.desc = description;
@@ -48,7 +48,7 @@ const descValidator = (req, res, next) => {
 };
 
 //validates price - must include price
-const priceValidator = (req, res, next) => {
+function priceValidator(req, res, next) {
   const { data: { price } = {} } = req.body;
   if (price > 0 && typeof price === "number") {
     res.locals.price = price;
@@ -58,7 +58,7 @@ const priceValidator = (req, res, next) => {
 };
 
 //validates img_url - must include img_url
-const imgValidator = (req, res, next) => {
+function imgValidator(req, res, next) {
   const { data: { image_url } = {} } = req.body;
   if (image_url) {
     res.locals.imgurl = image_url;
@@ -68,7 +68,7 @@ const imgValidator = (req, res, next) => {
 };
 
 //create new dish
-const create = (req, res) => {
+function create(req, res) {
   const newDish = {
     id: nextId(),
     name: res.locals.name,
@@ -81,7 +81,7 @@ const create = (req, res) => {
 };
 
 //Checks dish exists
-const dishExists = (req, res, next) => {
+function dishExists (req, res, next) {
   const dishId = req.params.dishId;
   const foundDish = dishes.find((dish) => dish.id === dishId);
   if (foundDish) {
@@ -93,12 +93,12 @@ const dishExists = (req, res, next) => {
 };
 
 //reads dishes
-const read = (req, res) => {
+function read(req, res) {
   res.json({ data: res.locals.dish });
 };
 
 //update dishes
-const update = (req, res) => {
+function update(req, res) {
   const {
     data: { name, description, price, image_url/*, id*/ },
   } = req.body;
