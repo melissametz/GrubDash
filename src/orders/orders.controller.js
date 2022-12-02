@@ -38,10 +38,10 @@ const pendingCheck = (req, res, next) => {
 //checks deliver to property - must include
 const deliverToValidator = (req, res, next) => {
   const { data: { deliverTo } = {} } = req.body;
-  console.log("Hello Friend", req.body);
+  //console.log("Hello Friend", req.body);
   if (deliverTo) {
     res.locals.deliverTo = deliverTo;
-    console.log("Hello World", deliverTo);
+    //console.log("Hello World", deliverTo);
     return next();
   }
   next({ status: 400, message: "A 'deliverTo' property is required." });
@@ -51,7 +51,7 @@ const deliverToValidator = (req, res, next) => {
 const mobileNumberValidator = (req, res, next) => {
   const { data: { mobileNumber } = {} } = req.body;
   if (mobileNumber) {
-    //res.locals.mobileNumber = mobileNumber;
+    res.locals.mobileNumber = mobileNumber;
     return next();
   }
   next({ status: 400, message: "A 'mobileNumber' property is required." });
@@ -61,7 +61,7 @@ const mobileNumberValidator = (req, res, next) => {
 const dishesValidator = (req, res, next) => {
   const { data: { dishes } = {} } = req.body;
   if (dishes && Array.isArray(dishes) && dishes.length > 0) {
-    //res.locals.dishes = dishes;
+    res.locals.dishes = dishes;
     return next();
   }
   next({ status: 400, message: "A 'dishes' property is required." });
@@ -129,10 +129,10 @@ const update = (req, res) => {
     data: { deliverTo, mobileNumber, status, dishes },
   } = req.body;
 
-  (res.locals.foundOrder.deliverTo = deliverTo),
-    (res.locals.foundOrder.mobileNumber = mobileNumber),
-    (res.locals.foundOrder.status = status),
-    (res.locals.foundOrder.dishes = dishes);
+    res.locals.foundOrder.deliverTo = deliverTo,
+    res.locals.foundOrder.mobileNumber = mobileNumber,
+    res.locals.foundOrder.status = status,
+    res.locals.foundOrder.dishes = dishes;
 
   res.json({ data: res.locals.foundOrder });
 };
